@@ -152,7 +152,9 @@ def main():
 
 		import responders
 		print(responders.initialPage())
-		# test to here yo
+		# test to here yo3.
+		# pc
+		# all g now???????
 
 	except Exception as e:
 		print("ERROR: %s" % e.message)
