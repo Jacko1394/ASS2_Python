@@ -7,12 +7,6 @@ import json
 
 MIN_ARGC = 3
 
-if len(sys.argv) < MIN_ARGC:
-	print("ERROR: Incorrect number of arguments.")
-	sys.exit()
-else:
-	ARGC = len(sys.argv)  # save number of arguments
-
 
 def calc_date(date):
 	days2add = 0
@@ -55,32 +49,40 @@ def calc_date(date):
 	return new_date.strftime("%x")
 
 
-def get_station_location(station):
+def get_station_list():
 	try:
 		stops = open("stops.txt", "r")
 	except IOError as e:
 		print("ERROR: 'stops.txt' file not found.")
 		sys.exit()
 
-	found = False
-
-	location = ()
+	stations = []
 
 	for l in stops:
 		l = l.lower()  # convert to lowercase
 		l = re.findall('"([^"]*)"', l)  # extract/separate info
 
-		if not l:  # skip blank line (line 1)
+		if not l:  # skip any blank lines (line 1)
 			continue
 
 		l[1] = re.sub('\(.*?\)', '', l[1])  # remove text in brackets
-
-		if station in l[1]:
-			found = True
-			location = (l[1], l[2], l[3])  # save name, lat, lon
-			break
+		stations.append(l)
 
 	stops.close()
+
+	return stations
+
+
+def get_station_location(station):
+
+	found = False
+	location = ()
+	stations = get_station_list()
+
+	for s in stations:
+		if station in s[1]:
+			found = True
+			location = (s[1], s[2], s[3])  # save name, lat, lon
 
 	if not found:
 		print("ERROR: Station not found.")
@@ -108,7 +110,7 @@ def get_weather_report(location, date):
 		"Location: %s\nLatitude: %s\nLongitude: %s\n" \
 		"" % (str(location[0]).title(), location[1], location[2])
 	report += "Time: %s\n" \
-		"" % datetime.datetime.fromtimestamp(weatherdata["time"]).strftime("%A %b %d, %Y, %I:%M%p")
+		"" % date.strftime("%A %b %d, %Y, %I:%M%p")
 	report += "Summary: %s\n" \
 		"" % weatherdata["summary"]
 	report += "Temp: %s degrees celcius\n" \
@@ -122,6 +124,11 @@ def get_weather_report(location, date):
 
 
 def main():
+	if len(sys.argv) < MIN_ARGC:
+		print("ERROR: Incorrect number of arguments.")
+		sys.exit()
+	else:
+		ARGC = len(sys.argv)  # save number of arguments
 	try:
 		# Variables (arguments converted to lowercase):
 		location = get_station_location(str(sys.argv[1]).lower())
@@ -145,17 +152,6 @@ def main():
 			date = datetime.datetime.strptime("%s%s" % (date, time), "%x%I%M%p")
 
 		print(get_weather_report(location, date))
-
-		import webserver
-		temp = input("loading:")
-		webserver.server.server_close()
-
-		import responders
-		print(responders.initialPage())
-		# test to here yo3.
-		# pc
-		# all g now???????
-		# ye das it lets go
 
 	except Exception as e:
 		print("ERROR: %s" % e.message)
