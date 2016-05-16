@@ -122,11 +122,11 @@ def get_weather_report(location, date):
 
 
 def main():
-	#try:
+	try:
 		# Variables (arguments converted to lowercase):
 		location = get_station_location(str(sys.argv[1]).lower())
 
-		# If date specified, calc the number of days from todays date:
+		# If date specified, calc the number of days from today's date:
 		if ARGC > MIN_ARGC:
 			date = calc_date(sys.argv[2:ARGC - 1])
 		else:
@@ -146,11 +146,12 @@ def main():
 
 		print(get_weather_report(location, date))
 
-		# import webserver
+		import webserver
+		# test to here yo
 
-	#except Exception as e:
-		#print("ERROR: %s" % e.message)
-		#sys.exit()
+	except Exception as e:
+		print("ERROR: %s" % e.message)
+		sys.exit()
 
 
 # ------------------------------- END MAIN ------------------------------- #
