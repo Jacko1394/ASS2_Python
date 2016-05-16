@@ -1,8 +1,10 @@
-import sys
+import stage1
 import re
-from stage1 import get_station_list
+import datetime
+import webserver
 
-
+ampm = ('AM', 'PM')
+pageinfo = ("station", "date", "timehour", "timeampm")
 dates = ('Today', 'Tomorrow', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 
 
@@ -14,8 +16,8 @@ def generate_label(text, newline):
 
 
 def generate_station_dropdown():
-	stations = get_station_list()
-	data = '<select name="station">'
+	stations = stage1.get_station_list()
+	data = '<select name=%s>' % pageinfo[0]
 
 	for station in stations:
 		data += '<option value="%s">%s</option>' % (station[0], str(station[1]).title())
@@ -25,7 +27,7 @@ def generate_station_dropdown():
 
 
 def generate_date_dropdown():
-	data = '<select name="date">'
+	data = '<select name=%s>' % pageinfo[1]
 
 	for i in range(0, len(dates)):
 		data += '<option value="%s">%s</option>' % (i, dates[i])
@@ -35,9 +37,17 @@ def generate_date_dropdown():
 
 
 def generate_time_dropdown():
-	data = '<select name="station">'
-
+	# Hours:
+	data = '<select name=%s>' % pageinfo[2]
+	for i in range(1, 13):
+		data += '<option value="%s:00">%s:00</option>' % (i, i)
 	data += '</select>'
+	# AM/PM:
+	data += '<select name=%s>' % pageinfo[3]
+	data += '<option value="0">AM</option>'
+	data += '<option value="1">PM</option>'
+	data += '</select>'
+
 	return data
 
 
@@ -48,44 +58,44 @@ def stage2webpage():
 	data += '<body>'
 	data += '<form action="http://127.0.0.1:34567/" method="POST">'
 	# Add labels:
-	data += generate_label('***WEATHER/TRAIN PROGNOSTICATION DIVINER***', True)
+	data += generate_label('***WEATHER/TRAIN PROGNOSTICATION DIVINER***', True) + '<br>'
 	data += generate_label('Station: ', False)
 	# Add station dropdown menu:
-	data += generate_station_dropdown() + '<br>'
-
+	data += generate_station_dropdown() + '<br><br>'
+	# Add date dropdown menu:
 	data += generate_label('Date: ', False)
-	data += generate_date_dropdown() + '<br>'
-
+	data += generate_date_dropdown() + '<br><br>'
+	# Add time dropdown menu:
 	data += generate_label('Time: ', False)
-	data += generate_time_dropdown() + '<br>'
-
+	data += generate_time_dropdown() + '<br><br>'
+	# Add station dropdown menu:
 	data += '<input type="submit" value="Submit">'
 	data += '</form></body></html>'
-
 	return data
 
 
 def respond2webpage(formData):
-	print("received")
-	print(formData)
+	# Format date arg:
+	date = [dates[int(formData[pageinfo[1]])]]
+	date = stage1.calc_date(date)
 
-	fieldNames = formData.keys()
+	# Format time arg:
+	time = re.sub(':', '', formData[pageinfo[2]])
+	if len(time) < 4:
+		time = '0' + time + ampm[int(formData[pageinfo[3]])]
+	else:
+		time += ampm[int(formData[pageinfo[3]])]
 
-	data = ""
-	for field in fieldNames:
-		print(field)
-		data += "field is " + field + ", value is " + formData[field] + '<br>'
+	date = datetime.datetime.strptime("%s%s" % (date, time), "%x%I%M%p")
 
-	return data
+	# Format station arg:
+	location = ()
+	stations = stage1.get_station_list()
 
+	for s in stations:
+		if s[0] == str(formData[pageinfo[0]]):
+			location = (s[1], s[2], s[3])
+			break
 
-def main():
-	print("swag")
-	# generate_station_dropdown()
-	import webserver
-	print("swag")
-
-# ------------------------------- END MAIN ------------------------------- #
-
-if __name__ == "__main__":
-	main()
+	# Format report for HTML:
+	return re.sub("\n", "<br>", stage1.get_weather_report(location, date))

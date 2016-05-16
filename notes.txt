@@ -110,3 +110,16 @@ else:  # Daily prediction (up to 1 week ahead)
 <input type="submit" value="Submit">
 </form></body></html>
 
+print("received")
+	print(formData)
+
+	fieldNames = formData.keys()
+
+	data = ""
+	for field in fieldNames:
+		print(field)
+		data += "field is " + field + ", value is " + formData[field] + '<br>'
+
+	return data
+
+
