@@ -138,7 +138,7 @@ def main():
 		if len(re.sub("\D", "", time)) < 4:
 			time = "0" + time
 
-		# Generate date and time object based on analysed arguements:
+		# Generate date and time object based on analysed arguments:
 		if time.isdigit():
 			date = datetime.datetime.strptime("%s%s" % (date, time), "%x%H%M")
 		else:  # if time.isdigit is not true, am/pm formatting dealt with:
@@ -147,6 +147,11 @@ def main():
 		print(get_weather_report(location, date))
 
 		import webserver
+		temp = input("loading:")
+		webserver.server.server_close()
+
+		import responders
+		print(responders.initialPage())
 		# test to here yo
 
 	except Exception as e:
