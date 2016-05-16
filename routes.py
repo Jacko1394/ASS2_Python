@@ -8,10 +8,7 @@
 # expect to get a single parameter - a dictionary full of values
 # filled in from the original form
 
-# dsds
-
 
 def routes():
-	return (('get', '/', 'responders::initialPage'),      
-			('post', '/', 'responders::respondToSubmit'),
-			('post', '/processRequest', 'responders::respondToSubmit'))
+	return (('get', '/', 'stage2::stage2webpage'),
+			('post', '/', 'stage2::respond2webpage'))
