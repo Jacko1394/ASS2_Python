@@ -155,6 +155,7 @@ def main():
 		# test to here yo3.
 		# pc
 		# all g now???????
+		# ye das it lets go
 
 	except Exception as e:
 		print("ERROR: %s" % e.message)
