@@ -1,0 +1,103 @@
+https://api.forecast.io/forecast/e24dac09f9fd8317208be7bc7504d270/-37.814107,144.963280?units=si&exclude=currently,minutely,hourly
+
+API Call Format:
+https://api.forecast.io/forecast/*api-key*/LAT,LON,TIME?units=si&exclude=minutely,hourly
+
+"15351","Sunbury Railway Station (Sunbury)","-37.5790909705787","144.727318781329"
+
+https://api.forecast.io/forecast/e24dac09f9fd8317208be7bc7504d270/-37.5790909705787,144.727318781329?units=si&exclude=currently,minutely,hourly
+
+"Melbourne Central" 2 days from tomorrow 5:00pm
+
+
+------------------------------
+
+------------------------------
+numOfArgs = len(sys.argv)
+station = str(sys.argv[1]).lower()
+
+myNums = ['3', "7", "9"]
+
+"""
+weatherAPI = "https://api.forecast.io/forecast/e24dac09f9fd8317208be7bc7504d270/" \
+             "-37.814107,144.963280?units=si&exclude=currently,minutely,hourly"
+response = urllib.request.urlopen(weatherAPI).read()
+"""
+class Counter:
+	def __init__(self):
+		self.count = 0
+	def value(self):
+		return self.count
+	def inc(self):
+		self.count += 1
+
+
+print("howdy")
+
+def main():
+	print(sys.argv[numOfArgs - 1])
+	print(station)
+	thingo = routes.routes()
+	for r in thingo:
+		print(r)
+	myNums[1] = 7.565656
+	for n in myNums:
+		print(n)
+
+	"""
+	print('RESPONSE:')
+	print(response)
+	response = '["foo", {"bar":["baz", null, 1.0, 2]}]'
+	analysed = json.load(response)
+	print(analysed)
+	"""
+	c = Counter()
+	print(c.value())
+	c.inc()
+	print(c.value())
+
+	# stops = open("stops.txt", "r")
+	# stopLines = []
+	# found = False
+	# for l in stops:
+		# stopLines.append(l)
+		# if station in l.lower():
+			# found = True
+			# print(l)
+	# stops.close()
+
+	if found:
+		print(l)
+
+	#print(stopLines[1])
+
+
+-------------------------------------------
+
+# STATION, (N)DAYS FROM, SPECIFIER, TIME
+# melbourne central 5 days from SPECIFYER -time
+# melbourne central SPECIFYER -time
+# melbourne central SPECIFYER -time
+
+    # print(date.strftime("%c"))
+	# time = datetime.datetime.strptime("Sat May 7 05:50:50 2016","%c")
+
+	# when = combine dat + time
+	# apicall = generate_api(station, date, when)
+
+	# print("%s %s" % (date, time))
+	# print("TODAY: %s" % datetime.datetime.now().strftime("%x %I%M%p"))
+	# print("STATION: %s" % station)
+	# print("TIME: %s" % time)
+
+
+
+if int(hoursfromnow) < 48:  # Hourly prediction (up to 2 days ahead)
+    weatherdata = weatherdata["hourly"]["data"][hoursfromnow + 1]
+    tempkey = "temperature"
+else:  # Daily prediction (up to 1 week ahead)
+    hoursfromnow = int(hoursfromnow / 24)
+    weatherdata = weatherdata["daily"]["data"][hoursfromnow]
+	tempkey = "temperatureMax"
+
+
