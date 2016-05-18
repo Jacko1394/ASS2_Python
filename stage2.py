@@ -1,11 +1,13 @@
-import stage1
+#import stage1
 import re
 import datetime
+from stage1 import calc_date, get_station_list, get_weather_report
 import webserver
 
 ampm = ('AM', 'PM')
 pageinfo = ("station", "date", "timehour", "timeampm")
 dates = ('Today', 'Tomorrow', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+stations = get_station_list()
 
 
 def generate_label(text, newline):
@@ -16,7 +18,6 @@ def generate_label(text, newline):
 
 
 def generate_station_dropdown():
-	stations = stage1.get_station_list()
 	data = '<select name=%s>' % pageinfo[0]
 
 	for station in stations:
@@ -54,7 +55,7 @@ def generate_time_dropdown():
 def stage2webpage():
 	# Initialisation:
 	data = '<html>'
-	data += '<head><title>Stage2:s3529497</title></head>'
+	data += '<head><title>Stage2 : s3529497</title></head>'
 	data += '<body>'
 	data += '<form action="http://127.0.0.1:34567/" method="POST">'
 	# Add labels:
@@ -68,8 +69,9 @@ def stage2webpage():
 	# Add time dropdown menu:
 	data += generate_label('Time: ', False)
 	data += generate_time_dropdown() + '<br><br>'
-	# Add station dropdown menu:
-	data += '<input type="submit" value="Submit">'
+	# Add submit button:
+	data += '<input type="submit" value="Submit"><br><br>'
+	data += generate_label('**************************************************', True)
 	data += '</form></body></html>'
 	return data
 
@@ -77,7 +79,7 @@ def stage2webpage():
 def respond2webpage(formData):
 	# Format date arg:
 	date = [dates[int(formData[pageinfo[1]])]]
-	date = stage1.calc_date(date)
+	date = calc_date(date)
 
 	# Format time arg:
 	time = re.sub(':', '', formData[pageinfo[2]])
@@ -86,16 +88,29 @@ def respond2webpage(formData):
 	else:
 		time += ampm[int(formData[pageinfo[3]])]
 
+	# Format date for weather report call:
 	date = datetime.datetime.strptime("%s%s" % (date, time), "%x%I%M%p")
 
 	# Format station arg:
 	location = ()
-	stations = stage1.get_station_list()
 
 	for s in stations:
 		if s[0] == str(formData[pageinfo[0]]):
 			location = (s[1], s[2], s[3])
 			break
 
+	# Draw box around station name:
+	import stage3
+
+	# Initialisation:
+	data = '<html>'
+	data += '<head><title>Stage2 : s3529497</title></head>'
+	data += '<body>'
 	# Format report for HTML:
-	return re.sub("\n", "<br>", stage1.get_weather_report(location, date))
+	data += re.sub("\n", "<br>", get_weather_report(location, date)) + '<br>'
+	data += '<img src="metroModified.png" alt="assets/metro.png">'
+	data += '</body></html>'
+
+	return data
+
+
