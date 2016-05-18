@@ -10,7 +10,7 @@ Stage 2:
 Run in command line:
 python stage2.py
 (no arguments)
-Initialises local webserver at address localhost:34567
+Initializes local webserver at address localhost:34567
 Using dropdown optioning, time and station info is gathered, and using script from stage1, generates report.
 
 Stages 3 & 4:
