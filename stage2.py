@@ -5,7 +5,6 @@ from stage3 import draw_pic
 import webserver
 
 ampm = ('AM', 'PM')
-pageinfo = ("station", "date", "timehour", "timeampm")
 dates = ('Today', 'Tomorrow', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 stations = get_station_list()
 
@@ -18,7 +17,7 @@ def generate_label(text, newline):
 
 
 def generate_station_dropdown():
-	data = '<select name=%s>' % pageinfo[0]
+	data = '<select name=station>'
 
 	for station in stations:
 		data += '<option value="%s">%s</option>' % (station[0], str(station[1]).title())
@@ -28,7 +27,7 @@ def generate_station_dropdown():
 
 
 def generate_date_dropdown():
-	data = '<select name=%s>' % pageinfo[1]
+	data = '<select name=date>'
 
 	for i in range(0, len(dates)):
 		data += '<option value="%s">%s</option>' % (i, dates[i])
@@ -39,12 +38,12 @@ def generate_date_dropdown():
 
 def generate_time_dropdown():
 	# Hours:
-	data = '<select name=%s>' % pageinfo[2]
+	data = '<select name=timehour>'
 	for i in range(1, 13):
 		data += '<option value="%s:00">%s:00</option>' % (i, i)
 	data += '</select>'
 	# AM/PM:
-	data += '<select name=%s>' % pageinfo[3]
+	data += '<select name=timeampm>'
 	data += '<option value="0">AM</option>'
 	data += '<option value="1">PM</option>'
 	data += '</select>'
@@ -76,17 +75,17 @@ def stage2webpage():
 	return data
 
 
-def respond2webpage(formData):
+def respond2webpage(formdata):
 	# Format date arg:
-	date = [dates[int(formData[pageinfo[1]])]]
+	date = [dates[int(formdata['date'])]]
 	date = calc_date(date)
 
 	# Format time arg:
-	time = re.sub(':', '', formData[pageinfo[2]])
+	time = re.sub(':', '', formdata['timehour'])
 	if len(time) < 4:
-		time = '0' + time + ampm[int(formData[pageinfo[3]])]
+		time = '0' + time + ampm[int(formdata['timeampm'])]
 	else:
-		time += ampm[int(formData[pageinfo[3]])]
+		time += ampm[int(formdata['timeampm'])]
 
 	# Format date for weather report call:
 	date = datetime.datetime.strptime("%s%s" % (date, time), "%x%I%M%p")
@@ -95,15 +94,12 @@ def respond2webpage(formData):
 	location = ()
 
 	for s in stations:
-		if s[0] == str(formData[pageinfo[0]]):
+		if s[0] == str(formdata['station']):
 			location = (s[1], s[2], s[3])
 			break
 
-	print(formData[pageinfo[0]])
-
 	# Draw box around station name:
-	# print('dsdsdsdsddsdsdsdsdsdsdsdsdsdsdsdsdsddsdsdsd')
-	draw_pic()
+	draw_pic(formdata['station'])
 
 	# Initialisation:
 	data = '<html>'

@@ -59,11 +59,11 @@ def get_station_list():
 	stations = []
 
 	for l in stops:
-		if not l:  # skip any blank lines (line 1)
-			continue
-
 		l = l.lower()  # convert to lowercase
 		l = re.findall('"([^"]*)"', l)  # extract/separate info
+
+		if not l:  # skip any blank lines (line 1)
+			continue
 
 		l[1] = re.sub('\(.*?\)', '', l[1])  # remove text in brackets
 		stations.append(l)

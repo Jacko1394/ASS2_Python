@@ -123,3 +123,5 @@ print("received")
 	return data
 
 
+pageinfo = ("station", "date", "timehour", "timeampm")
+
