@@ -1,7 +1,7 @@
-#import stage1
 import re
 import datetime
 from stage1 import calc_date, get_station_list, get_weather_report
+from stage3 import draw_pic
 import webserver
 
 ampm = ('AM', 'PM')
@@ -99,8 +99,11 @@ def respond2webpage(formData):
 			location = (s[1], s[2], s[3])
 			break
 
+	print(formData[pageinfo[0]])
+
 	# Draw box around station name:
-	import stage3
+	# print('dsdsdsdsddsdsdsdsdsdsdsdsdsdsdsdsdsddsdsdsd')
+	draw_pic()
 
 	# Initialisation:
 	data = '<html>'
@@ -112,5 +115,3 @@ def respond2webpage(formData):
 	data += '</body></html>'
 
 	return data
-
-

@@ -1,14 +1,32 @@
-from PIL import Image, ImageDraw
 import sys
+import re
+from PIL import Image, ImageDraw
 
-# Load metro image to modify:
-im = Image.open('assets/metro.png')
 
-# Draw box around station:
-draw = ImageDraw.Draw(im)
-draw.line((0, 0) + im.size, fill=128)
-draw.line((0, im.size[1], im.size[0], 0), fill=128)
-del draw
+def get_station_pixel_points():
+	try:
+		pixels = open("StationPixelLocation.txt", "r")
+	except IOError as e:
+		print("ERROR: 'stops.txt' file not found.")
+		sys.exit()
 
-# Save new image:
-im.save('assets/metroModified.png', "PNG")
+	points = ()
+
+	for l in pixels:
+		if not l:
+			continue
+		l = l.lower()  # convert to lowercase
+		l = re.findall('"([^"]*)"', l)  # extract/separate info
+		print(l)
+		l[1] = re.sub('\(.*?\)', '', l[1])  # remove text in brackets
+
+
+
+def draw_pic():
+	# Load metro image to modify:
+	get_station_pixel_points()
+	im = Image.open('assets/metro.png')
+	dr = ImageDraw.Draw(im)
+	dr.rectangle(((100, 100), (200, 300)), fill="blue", outline="red")
+	del dr
+	im.save('assets/metroModified.png', "PNG")
