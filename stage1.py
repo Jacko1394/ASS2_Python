@@ -5,7 +5,8 @@ import re
 from urllib2 import Request, urlopen
 import json
 
-MIN_ARGC = 3
+station_file = "google_transit/stops.txt"
+min_argc = 3
 
 
 def calc_date(date):
@@ -18,19 +19,19 @@ def calc_date(date):
 
 	# DAY SPECIFIER: today/now, tomorrow, next week or weekday:
 	date[0] = date[0].lower()  # convert to lowercase
-	if date[0] == ("today" or "now"):
+	if date[0] == ('today' or 'now'):
 		del date
-	elif date[0] == "tomorrow":
+	elif date[0] == 'tomorrow':
 		days2add += 1
 		del date
-	elif date[0] == "next":
+	elif date[0] == 'next':
 		days2add += 7
 		del date
 
 	# DAYS OF THE WEEK:
 	else:
 		# Reference tuple of weekdays:
-		days = ("sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday")
+		days = ('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday')
 		date = str(date[0]).lower()  # convert to lowercase
 		# Check weekday match:
 		for d in days:
@@ -51,9 +52,10 @@ def calc_date(date):
 
 def get_station_list():
 	try:
-		stops = open("stops.txt", "r")
+		stops = open(station_file, 'r')
 	except IOError as e:
-		print("ERROR: 'stops.txt' file not found.")
+		print('ERROR: "stops.txt" file not found.')
+		del e
 		sys.exit()
 
 	stations = []
@@ -102,6 +104,7 @@ def get_weather_report(location, date):
 	weatherapi = Request("https://api.forecast.io/forecast/e24dac09f9fd8317208be7bc7504d270/"
 		"%s,%s?units=si&extend=hourly&exclude=currently,minutely,daily,alerts,flags"
 		% (location[1], location[2]))
+
 	# Extract JSON into data structure:
 	weatherdata = json.loads(urlopen(weatherapi).read())["hourly"]["data"][hoursfromnow]
 
@@ -109,22 +112,28 @@ def get_weather_report(location, date):
 	report = "***********WEATHER REPORT***********\n" \
 		"Location: %s\nLatitude: %s\nLongitude: %s\n" \
 		"" % (str(location[0]).title(), location[1], location[2])
+
 	report += "Time: %s\n" \
 		"" % date.strftime("%A %b %d, %Y, %I:%M%p")
+
 	report += "Summary: %s\n" \
 		"" % weatherdata["summary"]
+
 	report += "Temp: %s degrees celcius\n" \
 		"" % weatherdata["temperature"]
+
 	report += "Rain probability: %s%%\nRain quantity: %s mm/hour\n" \
 		"" % (weatherdata["precipProbability"] * 100, weatherdata["precipIntensity"])
+
 	report += "Wind speed: %s km/h\nWind direction: %s degrees\n" \
 		"" % (weatherdata["windSpeed"], weatherdata["windBearing"])
+
 	report += "************************************"
 	return report
 
 
 def main():
-	if len(sys.argv) < MIN_ARGC:
+	if len(sys.argv) < min_argc:
 		print("ERROR: Incorrect number of arguments.")
 		sys.exit()
 	else:
@@ -134,7 +143,7 @@ def main():
 		location = get_station_location(str(sys.argv[1]).lower())
 
 		# If date specified, calc the number of days from today's date:
-		if ARGC > MIN_ARGC:
+		if ARGC > min_argc:
 			date = calc_date(sys.argv[2:ARGC - 1])
 		else:
 			date = datetime.datetime.today().strftime("%x")
@@ -143,7 +152,7 @@ def main():
 		time = re.sub(":", "", str(sys.argv[ARGC - 1]).lower())
 		# Add '0' to start of time string if needed (for formatting):
 		if len(re.sub("\D", "", time)) < 4:
-			time = "0" + time
+			time = '0' + time
 
 		# Generate date and time object based on analysed arguments:
 		if time.isdigit():

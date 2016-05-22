@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import re
 import datetime
 from stage1 import calc_date, get_station_list, get_weather_report

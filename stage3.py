@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import re
 from PIL import Image, ImageDraw
@@ -8,6 +9,7 @@ def get_station_pixel_points(station):
 		pixels = open("StationPixelLocation.txt", "r")
 	except IOError as e:
 		print("ERROR: 'StationPixelLocation.txt' file not found.")
+		del e
 		sys.exit()
 
 	points = []
