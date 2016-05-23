@@ -125,3 +125,22 @@ print("received")
 
 pageinfo = ("station", "date", "timehour", "timeampm")
 
+for l in trips:
+
+		#if l[3] == end:
+		#	print(l)
+
+		print(l)
+
+	# trips.seek(0)
+
+	print('find')
+
+	for l in lines:
+		if not l:  # skip any blank lines
+			continue
+
+		#if l[0] == trip and l[3] == end:
+		#	print(l)
+
+

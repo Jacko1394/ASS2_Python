@@ -3,6 +3,7 @@ import re
 import datetime
 from stage1 import calc_date, get_station_list, get_weather_report
 from stage3 import draw_pic
+from stage4 import get_arrival_time
 import webserver
 
 ampm = ('AM', 'PM')
@@ -22,8 +23,8 @@ def generate_header(text):
 	return data
 
 
-def generate_station_dropdown():
-	data = '<select name=station>'
+def generate_station_dropdown(key):
+	data = '<select name=%sstation>' % key
 
 	for station in stations:
 		data += '<option value="%s">%s</option>' % (station[0], str(station[1]).title())
@@ -57,18 +58,51 @@ def generate_time_dropdown():
 	return data
 
 
+def generate_stage_2_3_page(location, date):
+	# Initialisation:
+	data = '<html>'
+	data += '<head><title>Stage2 : s3529497</title></head>'
+	data += '<body>'
+	data += generate_header('Stage 2:')
+	# Format report for HTML:
+	data += re.sub("\n", "<br>", get_weather_report(location, date)) + '<br>'
+	data += generate_header('Stage 3:')
+	data += '<img src="metroModified.png" alt="assets/metro.png">'
+	data += '</body></html>'
+
+	return data
+
+
+def generate_stage_4_page(start, end, date):
+
+	arrival = get_arrival_time(start, end, date)
+
+	#print(arrival)
+
+	# Initialisation:
+	data = '<html>'
+	data += '<head><title>Stage4 : s3529497</title></head>'
+	data += '<body>'
+	data += generate_header('Stage 4:')
+	# Format report for HTML:
+	data += 'Start time: %s<br>' % date
+	data += 'EARLIEST ARRIVAL: %s<br>' % arrival
+	data += '</body></html>'
+
+	return data
+
+
 def stage2webpage():
 	# Initialisation:
 	data = '<html>'
 	data += '<head><title>Stage2 : s3529497</title></head>'
 	data += '<body>'
 	data += generate_header('Stage 2:')
-	data += '<form action="http://127.0.0.1:34567/" method="POST">'
+	data += '<form action="http://127.0.0.1:34567/" method="POST"><br>'
 	# Add labels:
-	data += generate_label('***WEATHER/TRAIN PROGNOSTICATION DIVINER***', True) + '<br>'
-	data += generate_label('Station: ', False)
+	data += generate_label('Starting station: ', False)
 	# Add station dropdown menu:
-	data += generate_station_dropdown() + '<br><br>'
+	data += generate_station_dropdown('start') + '<br><br>'
 	# Add date dropdown menu:
 	data += generate_label('Date: ', False)
 	data += generate_date_dropdown() + '<br><br>'
@@ -76,13 +110,23 @@ def stage2webpage():
 	data += generate_label('Time: ', False)
 	data += generate_time_dropdown() + '<br><br>'
 	# Add submit button:
-	data += '<input type="submit" value="Submit"><br><br>'
-	data += generate_label('**************************************************', True)
+	data += '<input name=submit type="submit" value="Stage 2/3"><br><br><br>'
+	# data += generate_label('**************************************************', True)
+
+	data += generate_header('Stage 4:')
+
+	data += generate_label('End station: ', False)
+
+	data += generate_station_dropdown('end') + '<br>'
+
+	data += '<input name=submit type="submit" value="Stage 4"><br><br>'
+
 	data += '</form></body></html>'
 	return data
 
 
 def respond2webpage(formdata):
+	print(formdata)
 	# Format date arg:
 	date = [dates[int(formdata['date'])]]
 	date = calc_date(date)
@@ -101,22 +145,16 @@ def respond2webpage(formdata):
 	location = ()
 
 	for s in stations:
-		if s[0] == str(formdata['station']):
+		if s[0] == str(formdata['startstation']):
 			location = (s[1], s[2], s[3])
 			break
 
 	# Draw box around station name:
-	draw_pic(formdata['station'])
+	draw_pic(formdata['startstation'])
 
-	# Initialisation:
-	data = '<html>'
-	data += '<head><title>Stage2 : s3529497</title></head>'
-	data += '<body>'
-	data += generate_header('Stage 1:')
-	# Format report for HTML:
-	data += re.sub("\n", "<br>", get_weather_report(location, date)) + '<br>'
-	data += generate_header('Stage 3:')
-	data += '<img src="metroModified.png" alt="assets/metro.png">'
-	data += '</body></html>'
+	if formdata['submit'] == 'Stage 2/3':
+		data = generate_stage_2_3_page(location, date)
+	else:  # Stage 4:
+		data = generate_stage_4_page(formdata['startstation'], formdata['endstation'], date)
 
 	return data

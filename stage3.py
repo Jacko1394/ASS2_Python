@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import re
-from PIL import Image, ImageDraw
+#from PIL import Image, ImageDraw
 
 
 def get_station_pixel_points(station):
@@ -36,7 +36,7 @@ def get_station_pixel_points(station):
 
 def draw_pic(station):
 	# Load metro image to modify:
-	im = Image.open('assets/metro.png')
+	#im = Image.open('assets/metro.png')
 
 	# Read pixel point coordinates from text file for drawing:
 	p = get_station_pixel_points(station)
@@ -45,10 +45,11 @@ def draw_pic(station):
 		# If p is empty, station not in pixel point file was picked:
 		print('ERROR: Unsupported station selected.\nOnly Eltham, Sunbury and Werribee implemented.')
 	else:
+		print('fix this')
 		# Draw box around station:
-		dr = ImageDraw.Draw(im)
-		dr.rectangle(((p[0], p[1]), (p[2], p[3])), outline="red")
-		del dr
+		#dr = ImageDraw.Draw(im)
+		#dr.rectangle(((p[0], p[1]), (p[2], p[3])), outline="red")
+		#del dr
 
 	# Save new image:
-	im.save('assets/metroModified.png', "PNG")
+	#im.save('assets/metroModified.png', "PNG")

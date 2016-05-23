@@ -18,7 +18,10 @@ Generates report, returns webpage.
 Stage 3:
 NOT run in command line, scripts are used from stage2.
 Implemented and 'served up' as part of the webserver.
+ONLY 3 stations were implemented, as going thru 200 stations for each pixel coordinate would take too long.
+To evalutate, please select either Eltham, Sunbury or Werribie stations please. :)
 
 Stage 4:
-Run in command line:
-
+NOT run in command line, scripts are used from stage2.
+Implemented and 'served up' as part of the webserver.
+TAKES ABOUT 10 SECS to read info from large stop_times.txt file

@@ -137,19 +137,19 @@ def main():
 		print("ERROR: Incorrect number of arguments.")
 		sys.exit()
 	else:
-		ARGC = len(sys.argv)  # save number of arguments
+		argc = len(sys.argv)  # save number of arguments
 	try:
 		# Variables (arguments converted to lowercase):
 		location = get_station_location(str(sys.argv[1]).lower())
 
 		# If date specified, calc the number of days from today's date:
-		if ARGC > min_argc:
-			date = calc_date(sys.argv[2:ARGC - 1])
+		if argc > min_argc:
+			date = calc_date(sys.argv[2:argc - 1])
 		else:
 			date = datetime.datetime.today().strftime("%x")
 
 		# Time extracted from last argument (ARGC - 1):
-		time = re.sub(":", "", str(sys.argv[ARGC - 1]).lower())
+		time = re.sub(":", "", str(sys.argv[argc - 1]).lower())
 		# Add '0' to start of time string if needed (for formatting):
 		if len(re.sub("\D", "", time)) < 4:
 			time = '0' + time
