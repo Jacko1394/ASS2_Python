@@ -6,9 +6,9 @@ from PIL import Image, ImageDraw
 
 def get_station_pixel_points(station):
 	try:
-		pixels = open("StationPixelLocation.txt", "r")
+		pixels = open("station_pixel_location.txt", "r")
 	except IOError as e:
-		print("ERROR: 'StationPixelLocation.txt' file not found.")
+		print("ERROR: 'station_pixel_location.txt' file not found.")
 		del e
 		sys.exit()
 
@@ -41,8 +41,14 @@ def draw_pic(station):
 	# Read pixel point coordinates from text file for drawing:
 	p = get_station_pixel_points(station)
 
-	# Draw box around station:
-	dr = ImageDraw.Draw(im)
-	dr.rectangle(((p[0], p[1]), (p[2], p[3])), outline="red")
-	del dr
+	if not p:
+		# If p is empty, station not in pixel point file was picked:
+		print('ERROR: Unsupported station selected.\nOnly Eltham, Sunbury and Werribee implemented.')
+	else:
+		# Draw box around station:
+		dr = ImageDraw.Draw(im)
+		dr.rectangle(((p[0], p[1]), (p[2], p[3])), outline="red")
+		del dr
+
+	# Save new image:
 	im.save('assets/metroModified.png', "PNG")

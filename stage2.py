@@ -17,6 +17,11 @@ def generate_label(text, newline):
 	return data
 
 
+def generate_header(text):
+	data = '<header><h3>%s<br></h3></header>' % text
+	return data
+
+
 def generate_station_dropdown():
 	data = '<select name=station>'
 
@@ -57,6 +62,7 @@ def stage2webpage():
 	data = '<html>'
 	data += '<head><title>Stage2 : s3529497</title></head>'
 	data += '<body>'
+	data += generate_header('Stage 2:')
 	data += '<form action="http://127.0.0.1:34567/" method="POST">'
 	# Add labels:
 	data += generate_label('***WEATHER/TRAIN PROGNOSTICATION DIVINER***', True) + '<br>'
@@ -106,8 +112,10 @@ def respond2webpage(formdata):
 	data = '<html>'
 	data += '<head><title>Stage2 : s3529497</title></head>'
 	data += '<body>'
+	data += generate_header('Stage 1:')
 	# Format report for HTML:
 	data += re.sub("\n", "<br>", get_weather_report(location, date)) + '<br>'
+	data += generate_header('Stage 3:')
 	data += '<img src="metroModified.png" alt="assets/metro.png">'
 	data += '</body></html>'
 

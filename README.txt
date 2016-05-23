@@ -5,13 +5,20 @@ Stage 1:
 Run in command line:
 python stage1.py station {date} time
 Calculates time and station info to generate a weather report using online API.
+Returns report to terminal.
 
 Stage 2:
 Run in command line:
 python stage2.py
 (no arguments)
 Initializes local webserver at address localhost:34567
-Using dropdown optioning, time and station info is gathered, and using script from stage1, generates report.
+Using dropdown optioning, time and station info is gathered, and using script from stage1.
+Generates report, returns webpage.
 
-Stages 3 & 4:
-NOT run in command line, scripts are used from stage2, as they are implemented as part of the webserver.
+Stage 3:
+NOT run in command line, scripts are used from stage2.
+Implemented and 'served up' as part of the webserver.
+
+Stage 4:
+Run in command line:
+

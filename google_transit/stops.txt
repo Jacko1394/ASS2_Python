@@ -200,7 +200,7 @@
 "20032","Glenroy Railway Station (Glenroy)","-37.7045363302301","144.917220403897"
 "20033","Oak Park Railway Station (Oak Park)","-37.7179497287183","144.921518773078"
 "20034","Pascoe Vale Railway Station (Pascoe Vale)","-37.7307559550065","144.928195624317"
-"20035","Strathmore Railway Station (Essendon)","-37.7435913223491","144.927315711579"
+"20035","Strathmore Railway Station (Strathmore)","-37.7435913223491","144.927315711579"
 "20036","Glenbervie Railway Station (Essendon)","-37.7472098464194","144.920938683118"
 "20037","Essendon Railway Station (Essendon)","-37.7560116950847","144.916197501013"
 "20038","Moonee Ponds Railway Station (Moonee Ponds)","-37.7657066626859","144.919160695911"
