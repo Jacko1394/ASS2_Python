@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import sys
 import re
-import datetime
 
 
 def get_arrival_time(start, end, date):

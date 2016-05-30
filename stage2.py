@@ -77,8 +77,6 @@ def generate_stage_4_page(start, end, date):
 
 	arrival = get_arrival_time(start, end, date)
 
-	#print(arrival)
-
 	# Initialisation:
 	data = '<html>'
 	data += '<head><title>Stage4 : s3529497</title></head>'
@@ -126,7 +124,6 @@ def stage2webpage():
 
 
 def respond2webpage(formdata):
-	print(formdata)
 	# Format date arg:
 	date = [dates[int(formdata['date'])]]
 	date = calc_date(date)
